@@ -21,9 +21,17 @@ public class UsuarioService {
 	}
 	
 	
+	public Optional<Usuario> getUserById(Integer id) {
+		return usuarioRepository.findById(id);
+	}
+	
+	
 	public Usuario createUser(Usuario usuario) {
 		return usuarioRepository.save(usuario);
 	}
+	
+	
+	
 	
 	public Usuario updateUser(Usuario usuario, Integer id) {
 		Optional<Usuario> usuarioFind = usuarioRepository.findById(id);
@@ -41,5 +49,15 @@ public class UsuarioService {
 		
 		return usuarioMod;
 	}
+	
+	
+	public String deleteUser(Integer id) {
+		usuarioRepository.deleteById(id);
+		return "Usuario deletado com sucesso!";
+	}
+	
+	
+	
+	
 	
 }
