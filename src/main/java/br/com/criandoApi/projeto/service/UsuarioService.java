@@ -46,7 +46,7 @@ public class UsuarioService {
 		usuarioMod.setSenha(usuario.getSenha());
 		usuarioMod.setTelefone(usuario.getTelefone());
 		usuarioMod.setUsername(usuario.getUsername());
-		
+		usuarioRepository.save(usuarioMod);
 		return usuarioMod;
 	}
 	
