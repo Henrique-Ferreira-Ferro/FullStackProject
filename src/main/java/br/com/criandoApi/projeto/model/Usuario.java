@@ -6,62 +6,55 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "usuario")
+@Data
 public class Usuario {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Column(name = "nome_completo", length = 200, nullable = true)
+	
+	@NotBlank(message = "O nome é obrigatorio")
+	@NotNull
+	@NotEmpty
+	@Column(name = "nome_completo", length = 200, nullable = false)
+	@Size(min = 2, message = "O Nome deve ter no minimo 3 caracteres!")
 	private String nome;
-	@Column(name = "username", nullable = true)
+	
+	
+	@Column(name = "username", nullable = false)
 	private String username;
-	@Column(name = "email", length = 50, nullable = true)
+	
+	
+	@Email(message = "Insira um email valido!")
+	@NotBlank(message = "O email é obrigatorio")
+	@Column(name = "email", length = 50, nullable = false)
 	private String email;
-	@Column(name = "senha", columnDefinition = "TEXT", nullable = true)
+	
+	
+	@NotBlank(message = "A senha é obrigatoria")
+	@Column(name = "senha", columnDefinition = "TEXT", nullable = false)
 	private String senha;
-	@Column(name = "telefone", length = 15, nullable = true)
+	
+	
+	@NotBlank(message = "O telefone é obrigatorio")
+	@Column(name = "telefone", length = 15, nullable = false)
 	private String telefone;
 	
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getSenha() {
-		return senha;
-	}
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-	public String getTelefone() {
-		return telefone;
-	}
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
+	
 	
 	
 	
