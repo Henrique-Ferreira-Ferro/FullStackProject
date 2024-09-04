@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +61,7 @@ public class UsuarioController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<Usuario> validarSenha(@RequestBody Usuario usuario){
+	public ResponseEntity<Usuario> validarSenha(@Valid @RequestBody Usuario usuario){
 		
 		Boolean valid = usuarioService.validarSenha(usuario);
 		if(!valid) {
@@ -71,6 +72,7 @@ public class UsuarioController {
 	
 	
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String, String> handleValidationException(MethodArgumentNotValidException ex){
 		
 		Map<String, String> errors = new HashMap<>();
