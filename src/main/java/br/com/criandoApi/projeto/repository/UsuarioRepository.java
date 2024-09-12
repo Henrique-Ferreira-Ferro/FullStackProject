@@ -10,5 +10,4 @@ import br.com.criandoApi.projeto.model.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
     Optional<Usuario> findByEmail(String email);
-
 }

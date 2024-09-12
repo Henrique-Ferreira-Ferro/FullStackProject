@@ -3,29 +3,37 @@ package br.com.criandoApi.projeto.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import br.com.criandoApi.projeto.dto.CreateUserDTO;
+import br.com.criandoApi.projeto.dto.JwtTokenDTO;
+import br.com.criandoApi.projeto.dto.LoginUserDTO;
+import br.com.criandoApi.projeto.model.ModelRole;
+import br.com.criandoApi.projeto.model.ModelUserDetailsImpl;
 import br.com.criandoApi.projeto.model.Usuario;
 import br.com.criandoApi.projeto.repository.UsuarioRepository;
+import br.com.criandoApi.projeto.security.SecurityConfig;
 
 @Service
 public class UsuarioService {
 	
+	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	 @Autowired
+	    private SecurityConfig securityConfig;
+
+	    @Autowired
+	    private AuthenticationManager authenticationManager;
+
+	    @Autowired
+	    private JwtTokenService jwtTokenService;
 	
-	private PasswordEncoder passwordEncoder;
 	
-	
-	
-	public UsuarioService(UsuarioRepository usuarioRepository) {
-		super();
-		this.usuarioRepository = usuarioRepository;
-		this.passwordEncoder = new BCryptPasswordEncoder();
-	}
 
 
 	public List<Usuario> getAllUsers(){
@@ -38,11 +46,15 @@ public class UsuarioService {
 	}
 	
 	
-	public Usuario createUser(Usuario usuario) {
-		String encoder = this.passwordEncoder.encode(usuario.getSenha());
-		usuario.setSenha(encoder);
-		return usuarioRepository.save(usuario);
-	}
+	public void salvarUsuario(CreateUserDTO createUserDto) {
+        Usuario newUser = Usuario.builder()
+                .email(createUserDto.email())
+                .senha(securityConfig.passwordEncoder().encode(createUserDto.password()))
+                .roles(List.of(ModelRole.builder().name(createUserDto.role()).build()))
+                .build();
+
+        usuarioRepository.save(newUser);
+    }
 	
 	
 	
@@ -57,8 +69,6 @@ public class UsuarioService {
 		
 		usuarioMod.setNome(usuario.getNome());
 		usuarioMod.setEmail(usuario.getEmail());
-		String encoder = this.passwordEncoder.encode(usuario.getSenha());
-		usuario.setSenha(encoder);
 		usuarioMod.setTelefone(usuario.getTelefone());
 		usuarioMod.setUsername(usuario.getUsername());
 		usuarioRepository.save(usuarioMod);
@@ -71,12 +81,14 @@ public class UsuarioService {
 		return "Usuario deletado com sucesso!";
 	}
 
+	 public JwtTokenDTO autenticarUsuario(LoginUserDTO loginUserDto) {
+	        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+	                new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
 
-	public Boolean validarSenha(Usuario usuario) {
-		String senha = usuarioRepository.getById(usuario.getId()).getSenha();
-		boolean valid = passwordEncoder.matches(usuario.getSenha(), senha);
-		return valid;
-	}
+	        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+	        ModelUserDetailsImpl modelUserDetails = (ModelUserDetailsImpl) authentication.getPrincipal();
+	        return new JwtTokenDTO(jwtTokenService.generateToken(modelUserDetails));
+	    }
 	
 	
 	
