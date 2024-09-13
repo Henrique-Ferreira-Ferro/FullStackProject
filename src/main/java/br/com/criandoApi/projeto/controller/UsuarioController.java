@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,33 +53,6 @@ public class UsuarioController {
 	public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
 		return ResponseEntity.status(204).body(usuarioService.deleteUser(id));
 	}
-
-	
-//	@PostMapping("/login")
-//	public ResponseEntity<Usuario> validarSenha(@RequestBody Usuario usuario){
-//		
-//		Boolean valid = usuarioService.validarSenha(usuario);
-//		if(!valid) {
-//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//		}
-//		return ResponseEntity.status(200).build();
-//	}
-//	
-//	
-//	@ResponseStatus(HttpStatus.BAD_REQUEST)
-//	public Map<String, String> handleValidationException(MethodArgumentNotValidException ex){
-//		
-//		Map<String, String> errors = new HashMap<>();
-//		
-//		ex.getBindingResult().getAllErrors().forEach((error) -> {
-//			String fieldName = ((FieldError) error).getField();
-//			String errorMessage = error.getDefaultMessage();
-//			errors.put(fieldName, errorMessage);
-//		});
-//		return errors;
-//		
-//	}
-//	
 	
 	
 }
