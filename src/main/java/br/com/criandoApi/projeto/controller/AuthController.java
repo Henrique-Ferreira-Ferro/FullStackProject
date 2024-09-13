@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.criandoApi.projeto.dto.RegisterRequestDTO;
 import br.com.criandoApi.projeto.dto.ResponseDTO;
+import br.com.criandoApi.projeto.enums.UserRole;
 import br.com.criandoApi.projeto.infra.security.TokenService;
 import br.com.criandoApi.projeto.model.Usuario;
 import br.com.criandoApi.projeto.repository.UsuarioRepository;
@@ -49,6 +50,7 @@ public class AuthController {
             newUser.setEmail(body.getEmail());
             newUser.setSenha(passwordEncoder.encode(body.getSenha()));
             newUser.setTelefone(body.getTelefone());
+            newUser.setRole(body.getRole());
             this.repository.save(newUser);
 
             String token = this.tokenService.generateToken(newUser);

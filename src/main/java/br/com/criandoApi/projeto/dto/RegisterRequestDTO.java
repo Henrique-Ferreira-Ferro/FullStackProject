@@ -1,5 +1,6 @@
 package br.com.criandoApi.projeto.dto;
 
+import br.com.criandoApi.projeto.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,6 @@ public class RegisterRequestDTO {
 	private String email;
 	private String senha;
 	private String telefone;
-	
+	private UserRole role;
 	
 }
