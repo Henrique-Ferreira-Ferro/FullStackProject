@@ -40,6 +40,7 @@ public class UsuarioService {
 	
 	public Usuario createUser(Usuario usuario) {
 		String encoder = this.passwordEncoder.encode(usuario.getSenha());
+		usuario.setRole(usuario.getRole());
 		usuario.setSenha(encoder);
 		return usuarioRepository.save(usuario);
 	}
@@ -72,11 +73,6 @@ public class UsuarioService {
 	}
 
 
-	public Boolean validarSenha(Usuario usuario) {
-		String senha = usuarioRepository.getById(usuario.getId()).getSenha();
-		boolean valid = passwordEncoder.matches(usuario.getSenha(), senha);
-		return valid;
-	}
 	
 	
 	
