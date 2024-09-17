@@ -2,6 +2,7 @@ package br.com.criandoApi.projeto.controller;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,7 +36,7 @@ public class AuthController {
             String token = this.tokenService.generateToken(user);
             return ResponseEntity.ok(new ResponseDTO(user.getEmail(), token));
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado!");
     }
 
 
