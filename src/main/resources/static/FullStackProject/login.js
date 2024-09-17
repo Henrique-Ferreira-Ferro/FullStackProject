@@ -60,6 +60,8 @@ function logar() {
         if(!response.ok){
             if(response.status === 403){
                 alert("Usuario não encontrado ou senha incorreta")
+            }else if(response.status === 404){
+                alert("Usuario com email ou senha errado!")
             }else{
                 throw new Error('Erro ao tentar logar');
             }
