@@ -1,13 +1,16 @@
 const formulario = document.querySelector("form");
 
 const Inome = document.querySelector(".nome");
+const Iusername = document.querySelector(".username");
 const Iemail = document.querySelector(".email");
 const Isenha = document.querySelector(".senha");
 const Itel = document.querySelector(".tel");
 
+const btnCont = document.querySelector("#btn-enviar");
+
 function cadastrar(){
 
-    fetch("http://localhost:8080/cadastrar",
+    fetch("http://localhost:8080/auth/register",
         {
             headers: {
                 'Accept':'application/json',
@@ -17,6 +20,7 @@ function cadastrar(){
             body: JSON.stringify(
                 {
                     "nome": Inome.value,
+                    "username": Iusername.value,
                     "email": Iemail.value,
                     "senha": Isenha.value,
                     "telefone":Itel.value
@@ -31,6 +35,7 @@ function cadastrar(){
 
 function limpar(){
     Inome.value = "";
+    Iusername.value = "";
     Iemail.value = "";
     Isenha.value = "";
     Itel.value = "";
@@ -41,8 +46,6 @@ formulario.addEventListener('submit', function(event){
     
     cadastrar();
     limpar();
-
+    window.location.href = "login.html";
 });
-
-
 
