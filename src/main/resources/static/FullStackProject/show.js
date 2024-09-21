@@ -42,7 +42,6 @@ function loadConnection() {
     })
     .then(res => res.json()) // Converte a resposta em JSON
     .then(function(usuarios) {
-        console.log(usuarios); // Exibe os dados no console
         loadTable(usuarios); // Chama a função para popular a tabela
     })
     .catch(function(error) {

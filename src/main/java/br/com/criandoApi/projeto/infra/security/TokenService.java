@@ -1,15 +1,18 @@
 package br.com.criandoApi.projeto.infra.security;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 import br.com.criandoApi.projeto.model.Usuario;
 
@@ -21,10 +24,14 @@ public class TokenService {
 	    public String generateToken(Usuario user){
 	        try {
 	            Algorithm algorithm = Algorithm.HMAC256(secret);
-
+	            
+	           String role = user.getRole().getRole().toUpperCase();
+	            		
+	            
 	            String token = JWT.create()
 	                    .withIssuer("login-auth-api")
 	                    .withSubject(user.getEmail())
+	                    .withClaim("roles", Collections.singletonList(role))
 	                    .withExpiresAt(this.generateExpirationDate())
 	                    .sign(algorithm);
 	            return token;
