@@ -1,8 +1,8 @@
 const princ = document.querySelector("#main");
+const tableCont = document.querySelector(".table-container");
 
 function loadTable(usuarios) {
     // Limpa o conteúdo anterior da tabela (caso necessário)
-    princ.innerHTML = "";
 
     usuarios.forEach(usuario => {
         let tagTr = document.createElement("tr");
@@ -20,7 +20,7 @@ function loadTable(usuarios) {
         tagTr.appendChild(telefoneTd);
 
         // Adiciona a linha na tabela (ou div principal)
-        princ.appendChild(tagTr);
+        tableCont.appendChild(tagTr);
     });
 }
 
