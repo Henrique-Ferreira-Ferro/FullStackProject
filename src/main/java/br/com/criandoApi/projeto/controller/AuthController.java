@@ -2,8 +2,9 @@ package br.com.criandoApi.projeto.controller;
 
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,14 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.criandoApi.projeto.dto.LoginRequestDTO;
 import br.com.criandoApi.projeto.dto.RegisterRequestDTO;
 import br.com.criandoApi.projeto.dto.ResponseDTO;
 import br.com.criandoApi.projeto.enums.UserRole;
+import br.com.criandoApi.projeto.exceptions.BadRequestException;
 import br.com.criandoApi.projeto.infra.security.TokenService;
 import br.com.criandoApi.projeto.model.Usuario;
 import br.com.criandoApi.projeto.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import br.com.criandoApi.projeto.dto.LoginRequestDTO;
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin("*")
@@ -31,12 +33,12 @@ public class AuthController {
 	
 	@PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequestDTO body){
-        Usuario user = this.repository.findByEmail(body.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+        Usuario user = this.repository.findByEmail(body.getEmail()).orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado"));
         if(passwordEncoder.matches(body.getSenha(), user.getSenha())) {
             String token = this.tokenService.generateToken(user);
             return ResponseEntity.ok(new ResponseDTO(user.getEmail(), token));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não encontrado!");
+        	throw new ObjectNotFoundException(user.getId(), Usuario.class.getName());
     }
 
 
@@ -57,7 +59,7 @@ public class AuthController {
             String token = this.tokenService.generateToken(newUser);
             return ResponseEntity.ok(new ResponseDTO(newUser.getNome(), token));
         }
-        return ResponseEntity.badRequest().build();
+        throw new BadRequestException("Não foi possivel registrar o usuario!!");
     }
 	
 	
